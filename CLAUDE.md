@@ -75,7 +75,6 @@ These tools work together. Follow these integration rules STRICTLY:
 - `/triage` — full task triage
 - `/new-task` — guided task creation
 - `/close-task` — guided task closure
-- `/propose-spec` — guided spec creation
 - `/multi-agent` — start multi-agent coordinated session
 
 ## Rules

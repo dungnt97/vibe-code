@@ -66,10 +66,8 @@ Inside Claude Code, use these slash commands:
 | `/end-session` | Daily end routine (sync + cleanup) |
 | `/new-task` | Guided task creation |
 | `/close-task` | Guided task closure |
-| `/triage` | Full task triage |
-| `/propose-spec` | Start a structured spec |
 | `/multi-agent` | Start coordinated multi-agent session |
-| `/opsx:propose` | Create spec with all artifacts |
+| `/opsx:propose` | Start spec (proposal + design + specs + tasks + beads) |
 | `/opsx:apply` | Implement from spec |
 | `/opsx:archive` | Archive completed spec |
 
