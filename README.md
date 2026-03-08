@@ -17,18 +17,61 @@ A reusable starter template that integrates five tools into a layered workflow:
 ## Quick Start
 
 ```bash
-# 1. Bootstrap everything
+# 1. Clone and setup (installs all tools + plugins + generates MCP token)
+git clone <repo> my-project && cd my-project
 make setup
 
-# 2. Initialize task tracker
-br init
+# 2. Verify everything works
+make health
 
 # 3. Start working
 br q "My first task"
-br ready
-# ... implement ...
-br close <id> --reason "Done"
 ```
+
+That's it. Three commands.
+
+## Commands
+
+Just run `make` to see all available commands:
+
+```
+First time:
+  make setup           Install everything (tools + plugins + token)
+  make health          Verify all tools are working
+
+Daily:
+  make status          Git + tasks overview
+  make next            Recommended next task
+  make triage          Full triage view
+  make plan            Parallel execution plan
+  make sync            Export beads to git
+
+Multi-agent:
+  make start-mail      Start agent mail server
+  make stop-mail       Stop agent mail server
+  make mail-status     Check server status
+
+Maintenance:
+  make update          Update all tools to latest
+  make install-plugins Auto-install Claude Code plugins
+```
+
+## Claude Code Commands
+
+Inside Claude Code, use these slash commands:
+
+| Command | Purpose |
+|---------|---------|
+| `/start-session` | Daily start routine (status + inbox + alerts) |
+| `/end-session` | Daily end routine (sync + cleanup) |
+| `/new-task` | Guided task creation |
+| `/close-task` | Guided task closure |
+| `/triage` | Full task triage |
+| `/propose-spec` | Start a structured spec |
+| `/multi-agent` | Start coordinated multi-agent session |
+| `/opsx:propose` | Create spec with all artifacts |
+| `/opsx:apply` | Implement from spec |
+| `/opsx:archive` | Archive completed spec |
 
 ## Workflow Layers
 
@@ -46,7 +89,6 @@ For tasks with dependencies or multiple files:
 br create "Refactor auth module" --type task --priority 1
 br dep add <new-id> <blocking-id>
 bv --robot-next              # What should I do next?
-bv --robot-triage             # Full triage view
 # implement
 br close <id> --reason "Refactored"
 ```
@@ -54,62 +96,62 @@ br close <id> --reason "Refactored"
 ### Layer C: Coordinated Mode
 For parallel agents or delegated work:
 ```bash
-# Agent registers and coordinates via mcp_agent_mail MCP tools
-# See WORKFLOW.md for conventions
+make start-mail              # Start the agent mail server
+# In Claude Code:
+/multi-agent                 # Register lead, spawn sub-agents
+# Sub-agents work in worktrees, coordinate via mail
+make stop-mail               # When done
 ```
 
 ### Layer D: Structured Spec Mode
 For non-trivial features or risky changes:
 ```bash
 /opsx:propose "add-payment-system"
-# Review and refine specs
-/opsx:apply
-# Implement against spec
-/opsx:archive
+# Review and refine specs (proposal → design → specs → tasks)
+/opsx:apply                  # Implement against spec
+/opsx:archive                # Archive when complete
 ```
 
-## Key Files
+## Plugins
 
-| File | Purpose |
-|------|---------|
-| `AGENTS.md` | Instructions for Claude sessions |
-| `WORKFLOW.md` | Operating model and daily loop |
-| `PROJECT_RULES.md` | Escalation rules and conventions |
-| `Makefile` | Setup and daily commands |
-| `scripts/` | Bootstrap and helper scripts |
+Installed automatically by `make setup`:
+
+| Plugin | Purpose |
+|--------|---------|
+| **Superpowers** | Brainstorm, plan, TDD, debug, code review skills |
+| **Context7** | Real-time library/API docs |
+| **Code Review** | Multi-agent parallel code review |
+| **Security Guidance** | OWASP vulnerability scanning |
 
 ## Repo Structure
 
 ```
 .
-├── .beads/                  # Task database (br init creates this)
+├── .beads/                  # Task database (auto-created by setup)
 ├── .claude/
-│   ├── commands/            # Custom Claude Code commands
-│   └── settings/            # Claude Code settings
-├── .mail/                   # Agent mail storage (when multi-agent)
-├── openspec/                # Specs and proposals (openspec init creates this)
-│   ├── changes/
-│   └── project.md
-├── docs/
-│   ├── specs/               # Supplementary spec docs
-│   └── decisions/           # Architecture decision records
-├── scripts/                 # Setup and helper scripts
-├── templates/               # Message and spec templates
-├── examples/                # Example tasks, specs, messages
-├── AGENTS.md
-├── WORKFLOW.md
-├── PROJECT_RULES.md
-├── Makefile
+│   ├── commands/            # Slash commands (start-session, multi-agent, etc.)
+│   └── settings/            # MCP config (gitignored, auto-generated)
+├── openspec/                # Specs and proposals
+│   └── changes/             # Active and archived changes
+├── scripts/                 # Implementation (called by Makefile)
+├── docs/decisions/          # Architecture decision records
+├── templates/               # Message templates
+├── examples/                # Example workflows
+├── CLAUDE.md                # Instructions loaded every Claude session
+├── AGENTS.md                # Full operational instructions
+├── WORKFLOW.md              # Operating model and daily loop
+├── PROJECT_RULES.md         # Escalation rules and conventions
+├── Makefile                 # All commands (just run `make`)
 └── README.md
 ```
 
 ## Requirements
 
-- macOS (primary) or Linux
-- Node.js >= 20.19.0
+- macOS or Linux
+- Node.js >= 20.19
 - Rust/Cargo
 - Claude Code CLI
-- Python 3.11+ with uv (for mcp_agent_mail)
+- Python 3.11+ with uv (auto-installed if missing)
 
 ## License
 
