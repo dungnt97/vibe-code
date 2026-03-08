@@ -255,7 +255,7 @@ install_mail() {
         if ! grep -q 'alias am=' "$SHELL_RC" 2>/dev/null; then
             echo "" >> "$SHELL_RC"
             echo "# mcp_agent_mail server" >> "$SHELL_RC"
-            echo "alias am='cd $MCP_MAIL_DIR && source .venv/bin/activate && uv run python -m mcp_agent_mail.cli serve-http'" >> "$SHELL_RC"
+            echo "alias am='cd $MCP_MAIL_DIR && source .venv/bin/activate && set -a && source .env && set +a && uv run python -m mcp_agent_mail.cli serve-http'" >> "$SHELL_RC"
             success "Added 'am' alias to $SHELL_RC"
         fi
     fi
@@ -273,27 +273,39 @@ else
     install_mail
 fi
 
-# Ensure .claude MCP config exists
-MCP_CONFIG=".claude/settings/mcp.json"
-if [ -f "$MCP_CONFIG" ]; then
-    success "MCP config exists: $MCP_CONFIG"
+# ─── mcp_agent_mail token ──────────────────────────────────────────
+MCP_MAIL_ENV="$MCP_MAIL_DIR/.env"
+if [ -f "$MCP_MAIL_ENV" ] && grep -q '^HTTP_BEARER_TOKEN=.' "$MCP_MAIL_ENV" 2>/dev/null; then
+    MCP_TOKEN=$(grep -E '^HTTP_BEARER_TOKEN=' "$MCP_MAIL_ENV" | sed -E 's/^HTTP_BEARER_TOKEN=//')
+    success "Bearer token found in $MCP_MAIL_ENV"
 else
-    info "Creating MCP config..."
-    mkdir -p .claude/settings
-    cat > "$MCP_CONFIG" << 'MCPEOF'
+    info "Generating bearer token for mcp_agent_mail..."
+    if command -v python3 &>/dev/null; then
+        MCP_TOKEN=$(python3 -c "import secrets; print(secrets.token_hex(32))")
+    else
+        MCP_TOKEN="$(date +%s)_$(hostname)_$$"
+    fi
+    echo "HTTP_BEARER_TOKEN=$MCP_TOKEN" >> "$MCP_MAIL_ENV"
+    success "Bearer token generated and saved to $MCP_MAIL_ENV"
+fi
+
+# Write .claude MCP config with correct token
+MCP_CONFIG=".claude/settings/mcp.json"
+info "Writing MCP config with bearer token..."
+mkdir -p .claude/settings
+cat > "$MCP_CONFIG" << MCPEOF
 {
   "mcpServers": {
     "agent-mail": {
       "url": "http://127.0.0.1:8765/mcp/",
       "headers": {
-        "Authorization": "Bearer ${MCP_AGENT_MAIL_TOKEN}"
+        "Authorization": "Bearer $MCP_TOKEN"
       }
     }
   }
 }
 MCPEOF
-    success "MCP config created: $MCP_CONFIG"
-fi
+success "MCP config written: $MCP_CONFIG"
 
 # ─── Superpowers ────────────────────────────────────────────────────
 
@@ -311,10 +323,8 @@ echo ""
 echo "  Quick-start (paste into Claude Code):"
 echo ""
 echo "    /plugin marketplace add obra/superpowers-marketplace"
-echo "    /plugin marketplace add upstash/context7"
-echo "    /plugin marketplace add trailofbits/skills"
 echo "    /plugin install superpowers@superpowers-marketplace"
-echo "    /plugin install context7-plugin@context7-marketplace"
+echo "    /plugin install context7@claude-plugins-official"
 echo "    /plugin install code-review@claude-plugins-official"
 echo "    /plugin install security-guidance@claude-plugins-official"
 echo "    /plugin install playwright@claude-plugins-official"

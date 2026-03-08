@@ -7,5 +7,8 @@ Close a completed task/bead.
 3. If validation passes:
    - `br close <id> --reason "<brief description of what was done>"`
    - `br sync --flush-only`
-4. Check if this unblocked other tasks: `br ready`
-5. Report: what was closed, what's now unblocked, recommended next task
+4. Check if this unblocked other tasks: `bv --robot-next`
+5. If this bead was part of a spec (check bead comments for "Spec:" reference):
+   - Check if ALL beads for that spec are now closed
+   - If yes: suggest running `/opsx:archive` to archive the completed spec
+6. Report: what was closed, what's now unblocked, recommended next task
