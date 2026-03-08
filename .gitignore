@@ -1,0 +1,42 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Beads — track JSONL, ignore SQLite
+.beads/beads.db
+.beads/beads.db-wal
+.beads/beads.db-shm
+.beads/graph.html
+
+# Agent Mail — local coordination state only
+.mail/
+
+# mcp_agent_mail server state
+.env
+
+# OpenSpec — track specs, ignore temp
+openspec/.cache/
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Rust
+target/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Logs
+*.log
+
+# bv (beads viewer) local config and caches
+.bv/
