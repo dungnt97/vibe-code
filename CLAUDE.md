@@ -63,6 +63,12 @@ These tools work together. Follow these integration rules STRICTLY:
 - Code Review plugin runs on PR review requests
 - Security Guidance scans edits automatically
 
+### Multi-agent commands
+- `make start-mail` — start mcp_agent_mail server
+- `make stop-mail` — stop server
+- `make mail-status` — check server status
+- `/multi-agent` — start coordinated multi-agent session
+
 ### Custom commands
 - `/start-session` — daily start routine
 - `/end-session` — daily end routine
@@ -70,6 +76,7 @@ These tools work together. Follow these integration rules STRICTLY:
 - `/new-task` — guided task creation
 - `/close-task` — guided task closure
 - `/propose-spec` — guided spec creation
+- `/multi-agent` — start multi-agent coordinated session
 
 ## Rules
 - Always create a bead before starting work

@@ -18,9 +18,17 @@ Run the daily session start routine:
 
 7. Check for active specs: list `openspec/changes/` excluding archive
 
-8. Present a concise summary to the user:
+8. Check multi-agent status:
+   ```
+   bash scripts/mail-server.sh status
+   ```
+   If running: use mcp_agent_mail `fetch_inbox` to check for pending messages.
+   If not running: skip (solo mode).
+
+9. Present a concise summary to the user:
    - Open tasks count
    - In-progress tasks
    - Active specs (if any)
    - Recommended next action
    - Any alerts or blockers
+   - Agent mail status (running/stopped)

@@ -3,7 +3,7 @@
     "agent-mail": {
       "url": "http://127.0.0.1:8765/mcp/",
       "headers": {
-        "Authorization": "Bearer ${MCP_AGENT_MAIL_TOKEN}"
+        "Authorization": "Bearer 592c20a491be26f2209dc2d1c9d64aff6f710bf1022e1be92bf24fc5db6a5c1c"
       }
     }
   }

@@ -311,24 +311,13 @@ success "MCP config written: $MCP_CONFIG"
 
 header "Claude Code Plugins & Skills"
 
-echo -e "  ${YELLOW}Plugins must be installed inside Claude Code.${NC}"
-echo ""
-echo "  Full install/update guide:"
-if $UPDATE; then
-    echo "    bash scripts/setup-plugins.sh --update"
+if command -v claude &>/dev/null; then
+    info "Auto-installing core plugins via CLI..."
+    bash "$(dirname "$0")/install-plugins.sh" || warn "Plugin install had issues — run 'make install-plugins' later"
 else
-    echo "    bash scripts/setup-plugins.sh"
+    warn "Claude CLI not found — install plugins after installing Claude Code:"
+    echo "    make install-plugins"
 fi
-echo ""
-echo "  Quick-start (paste into Claude Code):"
-echo ""
-echo "    /plugin marketplace add obra/superpowers-marketplace"
-echo "    /plugin install superpowers@superpowers-marketplace"
-echo "    /plugin install context7@claude-plugins-official"
-echo "    /plugin install code-review@claude-plugins-official"
-echo "    /plugin install security-guidance@claude-plugins-official"
-echo "    /plugin install playwright@claude-plugins-official"
-echo ""
 
 # ─── Initial Commit ─────────────────────────────────────────────────
 
@@ -380,17 +369,23 @@ if $all_ok; then
     fi
     echo -e "${BOLD}${GREEN}╠══════════════════════════════════════════════════╣${NC}"
     echo -e "${BOLD}${GREEN}║                                                  ║${NC}"
-    echo -e "${BOLD}${GREEN}║  Next steps:                                     ║${NC}"
-    echo -e "${BOLD}${GREEN}║  1. Open Claude Code in this directory           ║${NC}"
-    echo -e "${BOLD}${GREEN}║  2. Install Superpowers plugin (see above)       ║${NC}"
-    echo -e "${BOLD}${GREEN}║  3. Run: br q \"My first task\"                    ║${NC}"
-    echo -e "${BOLD}${GREEN}║  4. Start building!                              ║${NC}"
+    echo -e "${BOLD}${GREEN}║  Ready to use! Open Claude Code and start.       ║${NC}"
+    echo -e "${BOLD}${GREEN}║                                                  ║${NC}"
+    echo -e "${BOLD}${GREEN}║  Quick start:                                    ║${NC}"
+    echo -e "${BOLD}${GREEN}║    br q \"My first task\"   — create a task        ║${NC}"
+    echo -e "${BOLD}${GREEN}║    make health            — verify all tools     ║${NC}"
+    echo -e "${BOLD}${GREEN}║    make start-mail        — start agent mail     ║${NC}"
     echo -e "${BOLD}${GREEN}║                                                  ║${NC}"
     echo -e "${BOLD}${GREEN}║  Daily commands:                                 ║${NC}"
     echo -e "${BOLD}${GREEN}║    make status    — overview                     ║${NC}"
     echo -e "${BOLD}${GREEN}║    make next      — recommended task             ║${NC}"
     echo -e "${BOLD}${GREEN}║    make triage    — full triage                  ║${NC}"
     echo -e "${BOLD}${GREEN}║    make sync      — export beads to git          ║${NC}"
+    echo -e "${BOLD}${GREEN}║                                                  ║${NC}"
+    echo -e "${BOLD}${GREEN}║  Multi-agent:                                    ║${NC}"
+    echo -e "${BOLD}${GREEN}║    make start-mail   — start mail server         ║${NC}"
+    echo -e "${BOLD}${GREEN}║    make stop-mail    — stop mail server          ║${NC}"
+    echo -e "${BOLD}${GREEN}║    make mail-status  — check server status       ║${NC}"
     echo -e "${BOLD}${GREEN}║                                                  ║${NC}"
     echo -e "${BOLD}${GREEN}╚══════════════════════════════════════════════════╝${NC}"
 else
