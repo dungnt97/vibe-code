@@ -63,10 +63,13 @@ These tools work together. Follow these integration rules STRICTLY:
 - Code Review plugin runs on PR review requests
 - Security Guidance scans edits automatically
 
-### Multi-agent commands
-- `make start-mail` — start mcp_agent_mail server
-- `make stop-mail` — stop server
-- `make mail-status` — check server status
+### Service commands
+- `make start-services` — start all services (Agent Mail + Beads Viewer)
+- `make stop-services` — stop all services
+- `make services-status` — check all services status
+- `make start-mail` / `make stop-mail` — Agent Mail only (port 8765)
+- `make start-bv` / `make stop-bv` — Beads Viewer only (port 9000)
+- `make bv-refresh` — re-export beads data to viewer
 - `/multi-agent` — start coordinated multi-agent session
 
 ### Custom commands

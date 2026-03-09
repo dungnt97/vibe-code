@@ -301,6 +301,10 @@ cat > "$MCP_CONFIG" << MCPEOF
       "headers": {
         "Authorization": "Bearer $MCP_TOKEN"
       }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--output-dir", ".screenshots"]
     }
   }
 }

@@ -21,10 +21,11 @@ help:
 	@echo "    make plan            Parallel execution plan"
 	@echo "    make sync            Export beads to git"
 	@echo ""
-	@echo "\033[1m  Multi-agent:\033[0m"
-	@echo "    make start-mail      Start agent mail server"
-	@echo "    make stop-mail       Stop agent mail server"
-	@echo "    make mail-status     Check server status"
+	@echo "\033[1m  Services:\033[0m"
+	@echo "    make start-services  Start all services (Agent Mail + Beads Viewer)"
+	@echo "    make stop-services   Stop all services"
+	@echo "    make services-status Check all services status"
+	@echo "    make bv-refresh      Re-export beads data to viewer"
 	@echo ""
 	@echo "\033[1m  Maintenance:\033[0m"
 	@echo "    make update          Update all tools to latest"
@@ -106,7 +107,24 @@ update-plugins:
 install-plugins:
 	@bash scripts/install-plugins.sh
 
-# ─── Multi-Agent ───────────────────────────────────────────────────
+# ─── Services ─────────────────────────────────────────────────────
+
+start-services:
+	@bash scripts/mail-server.sh start
+	@bash scripts/bv-server.sh start
+	@echo ""
+	@echo "  Agent Mail:    http://localhost:8765/mail"
+	@echo "  Beads Viewer:  http://localhost:9000"
+
+stop-services:
+	@bash scripts/mail-server.sh stop
+	@bash scripts/bv-server.sh stop
+
+services-status:
+	@echo "=== Agent Mail ==="
+	@bash scripts/mail-server.sh status
+	@echo "\n=== Beads Viewer ==="
+	@bash scripts/bv-server.sh status
 
 start-mail:
 	@bash scripts/mail-server.sh start
@@ -116,6 +134,18 @@ stop-mail:
 
 mail-status:
 	@bash scripts/mail-server.sh status
+
+start-bv:
+	@bash scripts/bv-server.sh start
+
+stop-bv:
+	@bash scripts/bv-server.sh stop
+
+bv-status:
+	@bash scripts/bv-server.sh status
+
+bv-refresh:
+	@bash scripts/bv-server.sh refresh
 
 # ─── Daily Commands ────────────────────────────────────────────────
 
@@ -182,5 +212,6 @@ clean:
 .PHONY: help setup update init status next triage plan insights alerts sync health
 .PHONY: setup-br setup-bv setup-openspec setup-mail setup-plugins
 .PHONY: update-br update-bv update-openspec update-mail update-plugins
-.PHONY: install-plugins start-mail stop-mail mail-status
+.PHONY: install-plugins start-services stop-services services-status
+.PHONY: start-mail stop-mail mail-status start-bv stop-bv bv-status bv-refresh
 .PHONY: graph graph-html test lint validate clean

@@ -18,12 +18,19 @@ Run the daily session start routine:
 
 7. Check for active specs: list `openspec/changes/` excluding archive
 
-8. Check multi-agent status:
-   ```
+8. **Start services (if not already running):**
+   ```bash
+   # Agent Mail (port 8765)
    bash scripts/mail-server.sh status
+   # If not running, start it:
+   bash scripts/mail-server.sh start
+
+   # Beads Viewer (port 9000)
+   bash scripts/bv-server.sh status
+   # If not running, start it:
+   bash scripts/bv-server.sh start
    ```
-   If running: use mcp_agent_mail `fetch_inbox` to check for pending messages.
-   If not running: skip (solo mode).
+   If Agent Mail is running: use mcp_agent_mail `fetch_inbox` to check for pending messages.
 
 9. Present a concise summary to the user:
    - Open tasks count
@@ -31,4 +38,6 @@ Run the daily session start routine:
    - Active specs (if any)
    - Recommended next action
    - Any alerts or blockers
-   - Agent mail status (running/stopped)
+   - Services status:
+     - Agent Mail: http://localhost:8765/mail
+     - Beads Viewer: http://localhost:9000
