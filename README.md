@@ -32,44 +32,16 @@ That's it. Three commands.
 
 ## Commands
 
-Just run `make` to see all available commands:
+Run `make` to see all commands. Key ones:
 
 ```
-First time:
-  make setup           Install everything (tools + plugins + token)
-  make health          Verify all tools are working
-
-Daily:
-  make status          Git + tasks overview
-  make next            Recommended next task
-  make triage          Full triage view
-  make plan            Parallel execution plan
-  make sync            Export beads to git
-
-Multi-agent:
-  make start-mail      Start agent mail server
-  make stop-mail       Stop agent mail server
-  make mail-status     Check server status
-
-Maintenance:
-  make update          Update all tools to latest
-  make install-plugins Auto-install Claude Code plugins
+make setup           # First time — install everything
+make health          # Verify tools are working
+make start-services  # Start Agent Mail + Beads Viewer
+make stop-services   # Stop all services
 ```
 
-## Claude Code Commands
-
-Inside Claude Code, use these slash commands:
-
-| Command | Purpose |
-|---------|---------|
-| `/start-session` | Daily start routine (status + inbox + alerts) |
-| `/end-session` | Daily end routine (sync + cleanup) |
-| `/new-task` | Guided task creation |
-| `/close-task` | Guided task closure |
-| `/multi-agent` | Start coordinated multi-agent session |
-| `/opsx:propose` | Start spec (proposal + design + specs + tasks + beads) |
-| `/opsx:apply` | Implement from spec |
-| `/opsx:archive` | Archive completed spec |
+Inside Claude Code: `/start-session`, `/end-session`, `/new-task`, `/close-task`, `/multi-agent`, `/opsx:propose`, `/opsx:apply`
 
 ## Workflow Layers
 
@@ -94,11 +66,11 @@ br close <id> --reason "Refactored"
 ### Layer C: Coordinated Mode
 For parallel agents or delegated work:
 ```bash
-make start-mail              # Start the agent mail server
+make start-services          # Start Agent Mail + Beads Viewer
 # In Claude Code:
 /multi-agent                 # Register lead, spawn sub-agents
 # Sub-agents work in worktrees, coordinate via mail
-make stop-mail               # When done
+make stop-services           # When done
 ```
 
 ### Layer D: Structured Spec Mode
